@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Buddy - Interactive Deep Learning Guide</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="main-header">
+            <h1 class="title">📚 Study Buddy</h1>
+            <p class="subtitle">Your Interactive Deep Learning Companion</p>
+            <div class="header-decoration"></div>
+        </header>
+
+        <nav class="module-nav">
+            <button class="nav-btn active" data-module="3">Module 3</button>
+            <button class="nav-btn" data-module="4">Module 4</button>
+            <button class="nav-btn" data-module="5">Module 5</button>
+        </nav>
+
+        <!-- MODULE 3 -->
+        <div class="module-section active" id="module3">
+            <h2 class="module-title">Module 3 - Neural Networks Fundamentals</h2>
+            
+            <!-- Topic 1: Feedforward Network -->
+            <div class="topic-card">
+                <div class="topic-header" onclick="toggleTopic(this)">
+                    <span class="topic-number">1️⃣</span>
+                    <h3>Feedforward Network</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="topic-content">
+                    <p class="intro-text">A feedforward neural network is a type of neural network where information moves only in one direction — from input to output. There are no loops and no feedback connections.</p>
+                    
+                    <div class="info-box">
+                        <strong>Also called:</strong> Feedforward Neural Network, Multilayer Perceptron (MLP)
+                    </div>
+
+                    <h4>Structure</h4>
+                    <p>A feedforward network has three main parts:</p>
+                    <ul>
+                        <li><strong>Input layer</strong> – receives input data (like numbers or features)</li>
+                        <li><strong>Hidden layer(s)</strong> – performs intermediate computations</li>
+                        <li><strong>Output layer</strong> – gives the final prediction</li>
+                    </ul>
+
+                    <div class="formula-box">
+                        <strong>Mathematically:</strong><br>
+                        True function: y = f*(x)<br>
+                        Network function: y = f(x; Θ)<br>
+                        <em>Θ represents all weights and biases</em>
+                    </div>
+
+                    <div class="viz-box">
+                        <h4>📦 Network Visualization</h4>
+                        <div class="network-diagram">
+                            <div class="layer input-layer">
+                                <div class="neuron" data-neuron="0">I₁</div>
+                                <div class="neuron" data-neuron="1">I₂</div>
+                                <div class="neuron" data-neuron="2">I₃</div>
+                                <p class="layer-label">Input Layer</p>
+                            </div>
+                            <div class="connections">
+                                <svg class="connection-svg" viewBox="0 0 300 200">
+                                    <!-- Connections will be drawn by JS -->
+                                </svg>
+                            </div>
+                            <div class="layer hidden-layer">
+                                <div class="neuron" data-neuron="3">H₁</div>
+                                <div class="neuron" data-neuron="4">H₂</div>
+                                <p class="layer-label">Hidden Layer</p>
+                            </div>
+                            <div class="connections">
+                                <svg class="connection-svg" viewBox="0 0 300 100">
+                                    <!-- Connections -->
+                                </svg>
+                            </div>
+                            <div class="layer output-layer">
+                                <div class="neuron" data-neuron="5">O₁</div>
+                                <p class="layer-label">Output Layer</p>
+                            </div>
+                        </div>
+                        <button class="animate-btn" onclick="animateFeedforward()">🎬 Animate Flow</button>
+                    </div>
+
+                    <h4>Example: XOR Problem</h4>
+                    <p>XOR cannot be solved using a simple linear model. A feedforward network with one hidden layer can solve it by learning a new feature space.</p>
+                </div>
+            </div>
+
+            <!-- Topic 2: Gradient-Based Learning -->
+            <div class="topic-card">
+                <div class="topic-header" onclick="toggleTopic(this)">
+                    <span class="topic-number">2️⃣</span>
+                    <h3>Gradient-Based Learning (Cost Function & Output Units)</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="topic-content">
+                    <h4>Gradient-Based Learning</h4>
+                    <p>Neural networks learn using gradient descent - an iterative optimization method used to minimize the cost (loss) function.</p>
+                    
+                    <div class="info-box highlight">
+                        <strong>Why it's needed:</strong> Neural networks have many parameters. We want to adjust weights and biases so prediction error reduces.
+                    </div>
+
+                    <h4>Cost Function</h4>
+                    <p>The cost function measures how wrong the network's predictions are.</p>
+                    <div class="formula-box">
+                        <strong>Total Cost = Loss + Regularization term</strong>
+                    </div>
+
+                    <h4>Output Units</h4>
+                    <p>Output units produce the final prediction. Choice of output unit is closely related to the cost function.</p>
+                    
+                    <div class="viz-box">
+                        <h4>📦 Loss Curve Visualization</h4>
+                        <div class="loss-curve-container">
+                            <canvas id="lossCurve" width="600" height="300"></canvas>
+                        </div>
+                        <button class="animate-btn" onclick="animateLossCurve()">📉 Show Loss Reduction</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Topic 3: Backpropagation -->
+            <div class="topic-card">
+                <div class="topic-header" onclick="toggleTopic(this)">
+                    <span class="topic-number">3️⃣</span>
+                    <h3>Backpropagation in Neural Networks</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="topic-content">
+                    <p class="intro-text">Backpropagation is the core algorithm used to train neural networks. It's also called <strong>Backward Propagation of Errors</strong>.</p>
+
+                    <h4>Purpose</h4>
+                    <ul>
+                        <li>Calculate how much each weight and bias contributed to the error</li>
+                        <li>Use this information to update parameters</li>
+                        <li>Goal: minimize the cost function</li>
+                    </ul>
+
+                    <h4>How it Works</h4>
+                    <div class="backprop-container">
+                        <div class="phase-box">
+                            <h4>1. Forward Pass</h4>
+                            <ul>
+                                <li>Input flows from input layer to output layer</li>
+                                <li>Each layer computes weighted sum, adds bias, applies activation</li>
+                                <li>Output layer produces final prediction</li>
+                            </ul>
+                            <div class="arrow forward-arrow">→</div>
+                        </div>
+                        <div class="phase-box">
+                            <h4>2. Backward Pass</h4>
+                            <ul>
+                                <li>Error is calculated (e.g., Mean Squared Error)</li>
+                                <li>Error flows backwards</li>
+                                <li>Gradients are computed for each parameter</li>
+                                <li>Weights and biases are updated to reduce error</li>
+                            </ul>
+                            <div class="arrow backward-arrow">←</div>
+                        </div>
+                    </div>
+
+                    <div class="viz-box">
+                        <h4>📦 Backpropagation Animation</h4>
+                        <div class="backprop-diagram">
+                            <div class="network-mini">
+                                <div class="mini-layer">Input</div>
+                                <div class="mini-layer">Hidden</div>
+                                <div class="mini-layer">Output</div>
+                            </div>
+                        </div>
+                        <button class="animate-btn" onclick="animateBackprop()">🔄 Animate Forward/Backward Pass</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Topic 4: Regularization -->
+            <div class="topic-card">
+                <div class="topic-header" onclick="toggleTopic(this)">
+                    <span class="topic-number">4️⃣</span>
+                    <h3>Regularization in Deep Learning</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="topic-content">
+                    <p class="intro-text">Regularization helps the model generalize better and prevents overfitting.</p>
+
+                    <div class="warning-box">
+                        <strong>Overfitting:</strong> Model performs well on training data but poorly on unseen data.
+                    </div>
+
+                    <h4>Common Regularization Techniques</h4>
+                    
+                    <div class="regularization-grid">
+                        <div class="reg-item">
+                            <h5>L1 & L2 Regularization</h5>
+                            <p>Adds regularization term to cost function. Encourages smaller weight values.</p>
+                            <div class="weight-visualization">
+                                <div class="weight-bar l2-bar" data-weight="100">L2: Weight Decay</div>
+                            </div>
+                        </div>
+                        
+                        <div class="reg-item">
+                            <h5>Dropout</h5>
+                            <p>Randomly removes some neurons during training. Prevents dependency on specific neurons.</p>
+                            <div class="dropout-visualization">
+                                <div class="dropout-neuron active">N₁</div>
+                                <div class="dropout-neuron active">N₂</div>
+                                <div class="dropout-neuron active">N₃</div>
+                                <div class="dropout-neuron active">N₄</div>
+                            </div>
+                            <button class="animate-btn small" onclick="animateDropout()">Apply Dropout</button>
+                        </div>
+                        
+                        <div class="reg-item">
+                            <h5>Data Augmentation</h5>
+                            <p>Artificially increases training data. Common for images: rotation, flipping, scaling, shifting.</p>
+                        </div>
+                        
+                        <div class="reg-item">
+                            <h5>Early Stopping</h5>
+                            <p>Training stops when validation performance worsens. Prevents overfitting beyond a point.</p>
+                            <div class="early-stop-graph">
+                                <canvas id="earlyStopChart" width="400" height="200"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODULE 4 -->
+        <div class="module-section" id="module4">
+            <h2 class="module-title">Module 4 - Optimization for Deep Learning</h2>
+            
+            <!-- Topic 1: ERM -->
+            <div class="topic-card">
+                <div class="topic-header" onclick="toggleTopic(this)">
+                    <span class="topic-number">1️⃣</span>
+                    <h3>Empirical Risk Minimization (ERM)</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="topic-content">
+                    <p>The goal is to minimize the expected error (risk) over the true data distribution. Since the true distribution is unknown, we use training data as an approximation.</p>
+
+                    <div class="formula-box large">
+                        J(θ) = (1/m) Σ L(f(x⁽ⁱ⁾;θ), y⁽ⁱ⁾)<br>
+                        <small>where m = number of training samples, L = loss function</small>
+                    </div>
+
+                    <div class="viz-box">
+                        <h4>📦 ERM Visualization</h4>
+                        <div class="erm-visualization">
+                            <div class="data-points" id="dataPoints"></div>
+                            <div class="loss-bar-container">
+                                <div class="loss-bar" id="averageLoss">Average Loss: 0</div>
+                            </div>
+                            <div class="warning-label">⚠️ Overfitting Risk</div>
+                        </div>
+                    </div>
+
+                    <h4>Limitations of ERM</h4>
+                    <ul>
+                        <li>Can cause overfitting</li>
+                        <li>High-capacity models may memorize data</li>
+                        <li>Some losses (like 0–1 loss) are not differentiable</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Topic 2: Challenges -->
+            <div class="topic-card">
+                <div class="topic-header" onclick="toggleTopic(this)">
+                    <span class="topic-number">2️⃣</span>
+                    <h3>Challenges in Neural Network Optimization</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="topic-content">
+                    <p>Training neural networks is difficult because the optimization problem is <strong>non-convex</strong>.</p>
+
+                    <div class="challenges-grid">
+                        <div class="challenge-item">
+                            <h5>🔴 Ill-conditioning</h5>
+                            <p>Hessian matrix has very large or very small curvature. Learning becomes slow even with strong gradients.</p>
+                        </div>
+                        <div class="challenge-item">
+                            <h5>🔴 Local Minima</h5>
+                            <p>Many local minima exist due to weight symmetry. Usually not a serious problem in large networks.</p>
+                        </div>
+                        <div class="challenge-item">
+                            <h5>🔴 Saddle Points</h5>
+                            <p>Gradient is zero but not a minimum. Very common in high-dimensional spaces.</p>
+                        </div>
+                        <div class="challenge-item">
+                            <h5>🔴 Vanishing & Exploding Gradients</h5>
+                            <p>Gradients shrink or grow exponentially in deep networks. Causes unstable or stalled learning.</p>
+                        </div>
+                        <div class="challenge-item">
+                            <h5>🔴 Cliffs</h5>
+                            <p>Extremely steep regions in the loss surface. Large updates cause sudden jumps. Controlled using gradient clipping.</p>
+                        </div>
+                    </div>
+
+                    <div class="viz-box">
+                        <h4>📦 Loss Surface Visualization</h4>
+                        <canvas id="lossSurface" width="600" height="400"></canvas>
+                        <button class="animate-btn" onclick="animateLossSurface()">🎯 Show Challenges</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Topic 3: Optimization Algorithms -->
+            <div class="topic-card">
+                <div class="topic-header" onclick="toggleTopic(this)">
+                    <span class="topic-number">3️⃣</span>
+                    <h3>Optimization Algorithms</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="topic-content">
+                    <div class="optimizer-tabs">
+                        <button class="opt-tab active" data-optimizer="sgd">SGD</button>
+                        <button class="opt-tab" data-optimizer="adagrad">AdaGrad</button>
+                        <button class="opt-tab" data-optimizer="rmsprop">RMSProp</button>
+                        <button class="opt-tab" data-optimizer="adam">Adam</button>
+                    </div>
+
+                    <div class="optimizer-content active" id="sgd">
+                        <h4>Stochastic Gradient Descent (SGD)</h4>
+                        <p>SGD updates parameters using a small minibatch instead of the full dataset.</p>
+                        <div class="formula-box">θ ← θ − ϵ∇J(θ)</div>
+                        <div class="pros-cons">
+                            <div class="pros">
+                                <strong>✅ Advantages:</strong> Fast, memory-efficient, works well with large datasets
+                            </div>
+                            <div class="cons">
+                                <strong>❌ Disadvantages:</strong> Noisy updates, sensitive to learning rate
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="optimizer-content" id="adagrad">
+                        <h4>AdaGrad</h4>
+                        <p>AdaGrad adapts the learning rate individually for each parameter.</p>
+                        <p><strong>Idea:</strong> Large gradients → smaller learning rate | Small gradients → larger learning rate</p>
+                        <div class="warning-box">⚠️ Limitation: Learning rate keeps shrinking, can stop learning too early</div>
+                    </div>
+
+                    <div class="optimizer-content" id="rmsprop">
+                        <h4>RMSProp</h4>
+                        <p>RMSProp improves AdaGrad by using a moving average of squared gradients.</p>
+                        <div class="pros">
+                            <strong>✅ Advantages:</strong> Prevents learning rate from becoming too small, works well for non-convex problems, very popular in practice
+                        </div>
+                    </div>
+
+                    <div class="optimizer-content" id="adam">
+                        <h4>Adam</h4>
+                        <p>Adam combines Momentum and Adaptive learning rates.</p>
+                        <div class="pros">
+                            <strong>✅ Advantages:</strong> Fast convergence, stable updates, less sensitive to hyperparameters
+                        </div>
+                        <div class="highlight-box">
+                            <strong>⭐ Adam is one of the most widely used optimizers in deep learning!</strong>
+                        </div>
+                    </div>
+
+                    <div class="viz-box">
+                        <h4>📦 Optimizer Comparison</h4>
+                        <canvas id="optimizerComparison" width="700" height="400"></canvas>
+                        <button class="animate-btn" onclick="animateOptimizers()">🏃 Compare Optimizers</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Topic 4: Weight Initialization -->
+            <div class="topic-card">
+                <div class="topic-header" onclick="toggleTopic(this)">
+                    <span class="topic-number">4️⃣</span>
+                    <h3>Parameters in Weight Initialization Techniques</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="topic-content">
+                    <p>Proper initialization helps avoid vanishing/exploding gradients and speeds up learning.</p>
+
+                    <div class="init-params-grid">
+                        <div class="init-item">
+                            <h5>Weights (W)</h5>
+                            <p>Most important parameters. Xavier → sigmoid/tanh, He → ReLU</p>
+                        </div>
+                        <div class="init-item">
+                            <h5>Biases (b)</h5>
+                            <p>Usually small positive values (e.g., 0 or 0.01). Helps neurons activate early.</p>
+                        </div>
+                        <div class="init-item">
+                            <h5>Variance (σ²)</h5>
+                            <p>Too large → exploding gradients | Too small → vanishing gradients</p>
+                        </div>
+                        <div class="init-item">
+                            <h5>Distribution Type</h5>
+                            <p>Uniform or Normal. Xavier: uniform/normal, He: normal</p>
+                        </div>
+                    </div>
+
+                    <div class="viz-box">
+                        <h4>📦 Weight Initialization Visualization</h4>
+                        <div class="init-visualization">
+                            <canvas id="weightInit" width="600" height="300"></canvas>
+                            <div class="init-controls">
+                                <button class="animate-btn" onclick="showXavierInit()">Xavier (tanh/sigmoid)</button>
+                                <button class="animate-btn" onclick="showHeInit()">He (ReLU)</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODULE 5 -->
+        <div class="module-section" id="module5">
+            <h2 class="module-title">Module 5 - Convolutional Networks</h2>
+            
+            <!-- Topic 1: Convolution Operation -->
+            <div class="topic-card">
+                <div class="topic-header" onclick="toggleTopic(this)">
+                    <span class="topic-number">1️⃣</span>
+                    <h3>The Convolution Operation</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="topic-content">
+                    <p class="intro-text">The convolution operation is the core operation used in Convolutional Neural Networks (CNNs). It's a specialized linear operation designed to process grid-like data such as time-series and images.</p>
+
+                    <div class="info-box">
+                        <strong>In CNN terminology:</strong><br>
+                        Input → data (image, signal, etc.)<br>
+                        Kernel → learnable parameters<br>
+                        Output → feature map
+                    </div>
+
+                    <h4>Key Properties</h4>
+                    <ul>
+                        <li><strong>Sparse connectivity:</strong> each output depends only on a small local region</li>
+                        <li><strong>Parameter sharing:</strong> the same kernel is used across all locations</li>
+                        <li><strong>Translation equivariance:</strong> If input shifts, output shifts in the same way</li>
+                    </ul>
+
+                    <div class="viz-box">
+                        <h4>📦 Convolution Visualization</h4>
+                        <div class="conv-visualization">
+                            <canvas id="convCanvas" width="700" height="500"></canvas>
+                            <div class="conv-controls">
+                                <button class="animate-btn" onclick="animateConvolution()">▶️ Animate Convolution</button>
+                                <button class="animate-btn" onclick="resetConvolution()">🔄 Reset</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Topic 2: Pooling -->
+            <div class="topic-card">
+                <div class="topic-header" onclick="toggleTopic(this)">
+                    <span class="topic-number">2️⃣</span>
+                    <h3>Pooling</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="topic-content">
+                    <p>Pooling is an operation applied after convolution and activation. It summarizes nearby values in a feature map using a summary statistic.</p>
+
+                    <div class="pooling-types">
+                        <div class="pool-item">
+                            <h5>Max Pooling</h5>
+                            <p>Takes the maximum value in the pooling window</p>
+                        </div>
+                        <div class="pool-item">
+                            <h5>Average Pooling</h5>
+                            <p>Takes the average value in the pooling window</p>
+                        </div>
+                        <div class="pool-item">
+                            <h5>L2 Pooling</h5>
+                            <p>Takes the L2 norm of values in the pooling window</p>
+                        </div>
+                    </div>
+
+                    <h4>Benefits</h4>
+                    <ul>
+                        <li>Reducing spatial size</li>
+                        <li>Improving computational efficiency</li>
+                        <li>Making representations approximately invariant to small translations</li>
+                    </ul>
+
+                    <div class="viz-box">
+                        <h4>📦 Pooling Visualization</h4>
+                        <canvas id="poolingCanvas" width="600" height="400"></canvas>
+                        <button class="animate-btn" onclick="animatePooling()">📊 Show Pooling</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Topic 3: Convolution as Prior -->
+            <div class="topic-card">
+                <div class="topic-header" onclick="toggleTopic(this)">
+                    <span class="topic-number">3️⃣</span>
+                    <h3>Convolution and Pooling as an Infinitely Strong Prior</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="topic-content">
+                    <p>A prior represents assumptions about what kind of solutions are reasonable before seeing data.</p>
+
+                    <div class="prior-box">
+                        <h4>This prior enforces:</h4>
+                        <ul>
+                            <li>Features are local</li>
+                            <li>Weights are shared across space</li>
+                            <li>The learned function is translation equivariant</li>
+                            <li>Pooling enforces translation invariance</li>
+                        </ul>
+                    </div>
+
+                    <div class="viz-box">
+                        <h4>📦 Fully Connected vs Convolution</h4>
+                        <div class="comparison-visual">
+                            <div class="comparison-item">
+                                <h5>Fully Connected Network</h5>
+                                <canvas id="fcNetworkCanvas" width="300" height="300"></canvas>
+                                <p class="comparison-desc">All neurons connected to all neurons</p>
+                            </div>
+                            <div class="comparison-item">
+                                <h5>Convolutional Network</h5>
+                                <canvas id="convNetworkCanvas" width="300" height="300"></canvas>
+                                <p class="comparison-desc">Local connections with shared weights</p>
+                            </div>
+                        </div>
+                        <button class="animate-btn" onclick="drawComparisonNetworks()">🔄 Show Comparison</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Topic 4: Structured Outputs -->
+            <div class="topic-card">
+                <div class="topic-header" onclick="toggleTopic(this)">
+                    <span class="topic-number">4️⃣</span>
+                    <h3>Structured Outputs</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="topic-content">
+                    <p>CNNs are not limited to predicting a single label. They can produce structured outputs, such as:</p>
+                    <ul>
+                        <li>Pixel-wise class labels</li>
+                        <li>Segmentation masks</li>
+                        <li>Probability maps</li>
+                    </ul>
+
+                    <div class="formula-box">
+                        S<sub>i,j,k</sub> = probability that pixel (j,k) belongs to class i
+                    </div>
+
+                    <div class="viz-box">
+                        <h4>📦 Structured Output Visualization</h4>
+                        <canvas id="structuredOutput" width="600" height="400"></canvas>
+                        <button class="animate-btn" onclick="animateStructuredOutput()">🎨 Show Segmentation</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Topic 5: Data Types -->
+            <div class="topic-card">
+                <div class="topic-header" onclick="toggleTopic(this)">
+                    <span class="topic-number">5️⃣</span>
+                    <h3>Data Types</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="topic-content">
+                    <p>CNNs can process different types of data, not just images.</p>
+
+                    <div class="data-types-tabs">
+                        <button class="data-tab active" data-type="1d">1D Data</button>
+                        <button class="data-tab" data-type="2d">2D Data</button>
+                        <button class="data-tab" data-type="3d">3D Data</button>
+                    </div>
+
+                    <div class="data-content active" id="1d">
+                        <h4>1D Data</h4>
+                        <p>Audio waveforms, time-series signals</p>
+                        <canvas id="data1d" width="600" height="200"></canvas>
+                    </div>
+
+                    <div class="data-content" id="2d">
+                        <h4>2D Data</h4>
+                        <p>Images, spectrograms</p>
+                        <canvas id="data2d" width="400" height="400"></canvas>
+                    </div>
+
+                    <div class="data-content" id="3d">
+                        <h4>3D Data</h4>
+                        <p>Video, volumetric medical scans</p>
+                        <canvas id="data3d" width="500" height="400"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Topic 6: Random Features -->
+            <div class="topic-card">
+                <div class="topic-header" onclick="toggleTopic(this)">
+                    <span class="topic-number">6️⃣</span>
+                    <h3>Random or Unsupervised Features</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="topic-content">
+                    <p>Training convolutional filters is computationally expensive. To reduce cost, features can be obtained without supervised learning.</p>
+
+                    <h4>Three Approaches:</h4>
+                    <ul>
+                        <li><strong>Random filters</strong> - Surprisingly, random filters followed by pooling often work well</li>
+                        <li><strong>Hand-designed filters</strong> - Traditional computer vision approach</li>
+                        <li><strong>Unsupervised learning</strong> - e.g., k-means clustering</li>
+                    </ul>
+
+                    <div class="viz-box">
+                        <h4>📦 Random vs Learned Filters</h4>
+                        <canvas id="filterComparison" width="700" height="300"></canvas>
+                        <button class="animate-btn" onclick="compareFilters()">🔍 Compare Filters</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Made with ❤️ to help you study! Good luck with your exam! 🎓</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
